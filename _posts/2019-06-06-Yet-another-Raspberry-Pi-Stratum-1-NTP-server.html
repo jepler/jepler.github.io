@@ -1,0 +1,246 @@
+---
+layout: default
+title: Yet another Raspberry Pi Stratum 1 NTP server
+redirect_from: 
+ - /01559823543
+---
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Yet another Raspberry Pi Stratum 1 NTP server</title>
+<link rel="stylesheet" href="https://media.unpythonic.net/css/bootstrap.min.css">
+<style>
+
+
+#mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #000;
+    opacity: 0.7;
+    display: none;
+}
+
+#loading {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 58px;
+    height: 60px;
+    background-color: black;
+    background-image: url('https://media.unpythonic.net/img/loading.gif');
+    opacity: 0.9;
+    z-index: 20;
+    display: none;
+    border-radius: 4px;
+}
+
+#bigimg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+#maskouter {
+    height: 100%;
+    display: table;
+    margin: 0 auto;
+}
+
+#maskinner {
+    vertical-align: middle;
+    display: table-cell;
+}
+
+#imgleft, #imgright {
+    cursor: pointer;
+    position: fixed;
+    top: 50%;
+    width: 64px;
+    height: 64px;
+    border-radius: 4px;
+    background-color: black;
+    z-index: 22;
+    opacity: 0.7;
+}
+
+#imgleft {
+    left: 0;
+    background-image: url('https://media.unpythonic.net/img/prevbtn.png');
+}
+
+#imgleft.disabled, #imgright.disabled { display: none; } 
+
+#imgright {
+    right: 0;
+    background-image: url('https://media.unpythonic.net/img/nextbtn.png');
+}
+
+#imgdesc {
+    position: fixed;
+    left: 64px;
+    bottom: 0;
+    background-color: #333;
+    width: 100%;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-left: 2em;
+    border: 1px solid #555;
+    border-bottom: 0;
+}
+
+#imgdesc .filename {
+    color: #fff;
+    font-weight: bold;
+}
+
+#imgdesc .description {
+    color: #fff;
+    padding-left: 1em;
+}
+
+#mask { z-index: 10990; }
+#loading { z-index: 10991; }
+#bigimg { z-index: 10992; }
+
+</style>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery-1.6.4.min.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/bootstrap-dropdown.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery.ba-hashchange.min.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery.mobile.custom.min.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/gallery.js"></script>
+<style><!--
+div.floatimageleft, div.floatimageright {
+    border: 1px solid black;
+    padding: 2px;
+    margin: 1em;
+}
+div.floatimageleft { clear: left; float: left; }
+div.floatimageright { clear: right; float: right; }
+div.floatimageleft img, div.floatimageright img { border: 0px; }
+
+div.floatimageleft img.zoom, div.floatimageright img.zoom {
+    padding: 4px; 
+}
+--></style>
+<style><!--
+div.albumouter {
+    margin-right: 1ex; 
+    margin-top: 1ex;
+    vertical-align: baseline;
+    display: -moz-inline-box;
+    display: inline-block;
+    text-decoration: none !important; 
+}
+
+.album { display: block; clear: both; }
+
+.album a:link, .album a:hover, .album a:visited
+    { text-decoration: none; }
+.album a:hover { color: red; }
+
+.albumimage {
+    display: block;
+    padding-left: 2px; padding-right: 2px;
+    padding-top: 3px; padding-bottom: 3px;
+    background: #ececec;
+}
+
+.albumimage img.zoom {
+    margin-left: 0px; margin-right: 0px;
+    padding-top: 4px; padding-right: 4px; }
+.albumimage img { border: 0px; 
+    display: block; margin-left: auto; margin-right:auto
+}
+--></style>
+
+<!-- no summary found --><style> tt { background: #ececec; } </style>
+</head>
+<body>
+
+
+There are lots of instructions for setting up a Stratum 1 NTP server
+on your Raspberry Pi.  A lot.  After much research, I found a simple
+configuration that uses a single ntp reference clock and does not involve
+gpsd, but uses both NMEA and PPS for the most accurate timekeeping possible.
+NMEA+PPS is a mode of NTP's &quot;<a href="http://doc.ntp.org/4.2.8p10/drivers/driver20.html">Generic NMEA GPS Receiver</a>&quot;.
+
+<p>Here's what worked for me:
+
+<p>Start with a pi3 and raspbian stretch.  Add a GPS with TTL-level PPS and 9600
+baud NMEA outputs.
+
+<p>Hook up you GPS: GND and +3.3V or +5V (according to the specifiics of your GPS)
+to any matching pin, the GPS's TX output to the Pi's RX input on pin 10
+of the header, and the GPS's PPS output to the Pi's pin 12.  (You can hook
+up your GPS's RX input to the Pi's TX output on pin 8 if you like, but I don't
+think this is necessary)
+
+<p>Using raspi-config, disable the serial console and enable the serial port
+hardware.
+
+<p>Manually edit /boot/config.txt to add: <tt>dtoverlay=pps-gpio</tt> —
+If you have to (or prefer to) use a different pin for pps, you can apparently
+specify it as <tt>dtoverlay=pps-gpio,gpiopin=##</tt>, where ## is the
+internal numbering of the GPIO pins, not the number on the 40-pin header.
+
+<p>Manually edit /etc/modules and add a line that reads <tt>pps-gpio</tt> — According to some sources, this step is not necessary.
+
+<p>Install ntpd with apt-get.
+
+<p>Delete all the content in /etc/dhcp/dhclient-exit-hooks.d/ntp, leaving an
+empty file.
+
+<p>Remove the file /run/ntp.conf.dhcp if it exists.
+
+<p>Edit /etc/udev/rules.d/99-com.rules.  On each of the two lines that ends
+<tt>, SYMLINK+="serial%c"</tt>, append <tt>, SYMLINK+="gps%c"</tt>
+
+<p>Create /etc/udev/rules.d/99-ppsd.rules with the content <tt>SUBSYSTEM=="pps", GROUP="dialout", MODE="0660", SYMLINK+="gpspps%n"</tt>
+
+<p>In /etc/ntp.conf, add a stanza to access the GPS:
+<pre>
+# gps clock via serial /dev/gps0 and /dev/gpspps0
+server 127.127.20.0 minpoll 3 maxpoll 3 mode 16 burst iburst prefer
+fudge 127.127.20.0 refid GPS time2 +.250 flag1 1
+</pre>
+(leave the &quot;pool&quot; line(s) or other ntp server lines; if your pi doesn't
+have a battery-backed RTC, you need a way to get the correct time initially,
+before a GPS fix may be available!)
+
+<p>&quot;time2&quot; doesn't seem critical with this setup, because the PPS time is
+preferred over the serial reception time.  &quot;minpoll&quot;, &quot;maxpoll&quot;, &quot;burst&quot;
+and &quot;iburst&quot; may be superstitious and unnecessary.
+
+<p>Reboot now and have a look at `ntpq -c peers`.  You should see something
+like this:
+<pre>
+     remote           refid      st t when poll reach   delay   offset  jitter
+==============================================================================
+oGPS_NMEA(0)     .GPS.            0 l    1    8  377    0.000   -0.001   0.003
++ntp.u           .GPS.            1 u    2    8  377    1.104    0.013   0.064
+</pre>
+
+<p>&quot;GPS_NMEA&quot; is selected as peer and is using PPS (this is what &quot;o&quot; in the
+first column means).  delay, offset, and jitter should all be extremely small
+(Here, .001 is 1 microsecond).  &quot;ntp.u&quot; is my other local stratum-1 NTP server.
+The &quot;+&quot; indicates it's in good agreement with the local GPS.  If you use pool,
+you will see multiple lines here; some may have &quot;+&quot; and some may have &quot;-&quot;.
+
+<p>If something's not working, you will get, &quot; &quot; (blank), &quot;-&quot; or &quot;x&quot; next to
+GPS_NMEA.  If it's got &quot;*&quot; then NMEA is working but PPS isn't.  Now you get to do things like debug whether the PPS signal is working properly according to ppstest, whether NMEA messages are actually coming in
+at 9600 baud, etc.  Or you can follow one of those other guides.  :wink:
+
+<p>Here's how the local time to GPS offset has looked over the last
+10 hours or so — I find it awesome that my computer appears to be
+synchronized to GPS to within ±5 microseconds almost all of the time:
+
+<p><img src="https://media.unpythonic.net/emergent-files/01559823543/ntp-offset.png">
+
+<p><br><br><font size=-2>Entry first conceived on 6 June 2019, 12:19 UTC, last modified on 6 July 2019, 21:49 UTC</font>
+</body>
+</html><!--Imported with do-aether-page on Sat Jul  6 17:18:24 CDT 2019-->
