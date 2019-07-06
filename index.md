@@ -12,3 +12,16 @@ I'm available for contract-based software development, with an emphasis on embed
 I've been a contributor to Free and Open Source software for over 20 years.
 See my [github profile](https://github.com/jepler) for my contributions and original software.
 
+
+My Blog
+=======
+
+I've chosen these posts with a technical emphasis from my personal blog:
+
+<ul>
+  {% for post in site.posts %}
+    <li>
+      <a href="{{ post.url }}">{{ post.title }}</a>
+    </li>
+  {% endfor %}
+</ul>
