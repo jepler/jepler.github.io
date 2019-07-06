@@ -8,16 +8,17 @@ TITLE=`grep '<title>' $1.html.pre | head -1 | sed -Ee 's,</?title>,,g'`
 FSTITLE=`echo $TITLE | tr -Cs '[a-zA-Z0-9]' '-' | sed -Ee 's/^-*|-*$//g' `
 DATE=`date --date=@$1 +%Y-%m-%d`
 OUTFILE="_posts/$DATE-$FSTITLE.html"
+(
 echo $OUTFILE 1>&2
 exec > $OUTFILE
 echo "---"
 echo "layout: default"
-echo "title: $TITLE"
+echo "title: \"$TITLE\""
 echo "redirect_from: "
 echo " - /$1"
 echo "---"
 cat $1.html.pre
 rm $1.html.pre
-TZ=GMT echo "<!--Imported with do-aether-page on `date`-->"
+)
 git add $OUTFILE
 git commit -m"Migrate aether post from $1" $OUTFILE
