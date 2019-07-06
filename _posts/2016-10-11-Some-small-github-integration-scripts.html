@@ -1,0 +1,216 @@
+---
+layout: default
+title: Some small github integration scripts
+redirect_from: 
+ - /01476216996
+---
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Some small github integration scripts</title>
+<link rel="stylesheet" href="https://media.unpythonic.net/css/bootstrap.min.css">
+<style>
+
+
+#mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #000;
+    opacity: 0.7;
+    display: none;
+}
+
+#loading {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 58px;
+    height: 60px;
+    background-color: black;
+    background-image: url('https://media.unpythonic.net/img/loading.gif');
+    opacity: 0.9;
+    z-index: 20;
+    display: none;
+    border-radius: 4px;
+}
+
+#bigimg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+#maskouter {
+    height: 100%;
+    display: table;
+    margin: 0 auto;
+}
+
+#maskinner {
+    vertical-align: middle;
+    display: table-cell;
+}
+
+#imgleft, #imgright {
+    cursor: pointer;
+    position: fixed;
+    top: 50%;
+    width: 64px;
+    height: 64px;
+    border-radius: 4px;
+    background-color: black;
+    z-index: 22;
+    opacity: 0.7;
+}
+
+#imgleft {
+    left: 0;
+    background-image: url('https://media.unpythonic.net/img/prevbtn.png');
+}
+
+#imgleft.disabled, #imgright.disabled { display: none; } 
+
+#imgright {
+    right: 0;
+    background-image: url('https://media.unpythonic.net/img/nextbtn.png');
+}
+
+#imgdesc {
+    position: fixed;
+    left: 64px;
+    bottom: 0;
+    background-color: #333;
+    width: 100%;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-left: 2em;
+    border: 1px solid #555;
+    border-bottom: 0;
+}
+
+#imgdesc .filename {
+    color: #fff;
+    font-weight: bold;
+}
+
+#imgdesc .description {
+    color: #fff;
+    padding-left: 1em;
+}
+
+#mask { z-index: 10990; }
+#loading { z-index: 10991; }
+#bigimg { z-index: 10992; }
+
+</style>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery-1.6.4.min.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/bootstrap-dropdown.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery.ba-hashchange.min.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery.mobile.custom.min.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/gallery.js"></script>
+<style><!--
+div.floatimageleft, div.floatimageright {
+    border: 1px solid black;
+    padding: 2px;
+    margin: 1em;
+}
+div.floatimageleft { clear: left; float: left; }
+div.floatimageright { clear: right; float: right; }
+div.floatimageleft img, div.floatimageright img { border: 0px; }
+
+div.floatimageleft img.zoom, div.floatimageright img.zoom {
+    padding: 4px; 
+}
+--></style>
+<style><!--
+div.albumouter {
+    margin-right: 1ex; 
+    margin-top: 1ex;
+    vertical-align: baseline;
+    display: -moz-inline-box;
+    display: inline-block;
+    text-decoration: none !important; 
+}
+
+.album { display: block; clear: both; }
+
+.album a:link, .album a:hover, .album a:visited
+    { text-decoration: none; }
+.album a:hover { color: red; }
+
+.albumimage {
+    display: block;
+    padding-left: 2px; padding-right: 2px;
+    padding-top: 3px; padding-bottom: 3px;
+    background: #ececec;
+}
+
+.albumimage img.zoom {
+    margin-left: 0px; margin-right: 0px;
+    padding-top: 4px; padding-right: 4px; }
+.albumimage img { border: 0px; 
+    display: block; margin-left: auto; margin-right:auto
+}
+--></style>
+
+<!-- no summary found -->
+</head>
+<body>
+<b>Update, 2018-04-01</b>: I added <a href="https://media.unpythonic.net/emergent-files/01476216996/git-remote-add-github">git-remote-add-github</a>, a tool for adding github forks as remotes.
+
+<p>This is a little script I cooked up a few months ago, then hacked on a
+little bit this week.  It provides a convenient shortcut to locally
+fetch or merge the changes in a github pull request.  It doesn't require
+any special privileges (e.g., github account, API key) to use, unlike
+other alternatives like github-cli (ghi).
+
+<p><p><b>Files currently attached to this page:</b>
+<table cellpadding=5 style="width:auto!important; clear:none!important"><col><col style="text-align: right"><tr bgcolor=#eeeeee><td><a href="https://media.unpythonic.net/emergent-files/01476216996/git-merge-pr">git-merge-pr</a></td><td>2.9kB</td></tr><tr bgcolor=#dddddd><td><a href="https://media.unpythonic.net/emergent-files/01476216996/git-remote-add-github">git-remote-add-github</a></td><td>1.8kB</td></tr></table><p>
+
+<p><pre>
+# Quick commandline tool for fetching and/or merging github pull requests.
+#
+# Steps for use:
+# 
+# Once per computer or user, depending on location:
+#     Install the program `jq`; debian package name `jq`
+#
+#     Place this in the system directory shown by `git --exec-path` or in any
+#     directory listed on your $PATH, typically including $HOME/bin
+#
+#     You can (re)name it what you like, except that the name must begin
+#     "git-".  If the script name includes "pull" or "merge", invoking it will
+#     do a merge.  Otherwise, it will do a "fetch", leaving the branch for you
+#     to inspect at FETCH_HEAD
+#
+#     (you can create the second copy with e.g. `ln -s`)
+#
+# Once for each clone:
+#     Configure the github project, e.g.,
+#         git config github.project linuxcnc/linuxcnc
+# 
+# To merge or fetch an individual pull request, just specify it by number:
+#     git merge-pr 144
+#
+# If you put a copy / symlink as git-fetch-pr, you can also
+#     git fetch-pr 144
+#
+# To act on a pull request associatred with another fork of this project,
+# specify the name of the fork:
+#
+#     git fetch-pr jepler/linuxcnc#37
+#
+# This script does NOT check that you are merging the pull request to the
+# branch requested on github.
+#
+# License: CC0 https://creativecommons.org/share-your-work/public-domain/cc0/
+#          Also commonly called "Public Domain"
+</pre>
+<br><br><font size=-2>Entry first conceived on 11 October 2016, 20:16 UTC, last modified on 6 July 2019, 21:49 UTC</font>
+</body>
+</html>
