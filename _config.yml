@@ -1,0 +1,7 @@
+name: Jeff Epler
+title: Jeff Epler
+markdown: kramdown
+theme: jekyll-theme-leap-day
+description: Freelance Software Development
+github:
+    is_project_page: False
