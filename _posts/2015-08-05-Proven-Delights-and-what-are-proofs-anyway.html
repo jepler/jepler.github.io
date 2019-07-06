@@ -1,0 +1,202 @@
+---
+layout: default
+title: "Proven Delights (and what are proofs anyway)"
+redirect_from: 
+ - /01438780429
+---
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Proven Delights (and what are proofs anyway)</title>
+<link rel="stylesheet" href="https://media.unpythonic.net/css/bootstrap.min.css">
+<style>
+
+
+#mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #000;
+    opacity: 0.7;
+    display: none;
+}
+
+#loading {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 58px;
+    height: 60px;
+    background-color: black;
+    background-image: url('https://media.unpythonic.net/img/loading.gif');
+    opacity: 0.9;
+    z-index: 20;
+    display: none;
+    border-radius: 4px;
+}
+
+#bigimg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+#maskouter {
+    height: 100%;
+    display: table;
+    margin: 0 auto;
+}
+
+#maskinner {
+    vertical-align: middle;
+    display: table-cell;
+}
+
+#imgleft, #imgright {
+    cursor: pointer;
+    position: fixed;
+    top: 50%;
+    width: 64px;
+    height: 64px;
+    border-radius: 4px;
+    background-color: black;
+    z-index: 22;
+    opacity: 0.7;
+}
+
+#imgleft {
+    left: 0;
+    background-image: url('https://media.unpythonic.net/img/prevbtn.png');
+}
+
+#imgleft.disabled, #imgright.disabled { display: none; } 
+
+#imgright {
+    right: 0;
+    background-image: url('https://media.unpythonic.net/img/nextbtn.png');
+}
+
+#imgdesc {
+    position: fixed;
+    left: 64px;
+    bottom: 0;
+    background-color: #333;
+    width: 100%;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-left: 2em;
+    border: 1px solid #555;
+    border-bottom: 0;
+}
+
+#imgdesc .filename {
+    color: #fff;
+    font-weight: bold;
+}
+
+#imgdesc .description {
+    color: #fff;
+    padding-left: 1em;
+}
+
+#mask { z-index: 10990; }
+#loading { z-index: 10991; }
+#bigimg { z-index: 10992; }
+
+</style>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery-1.6.4.min.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/bootstrap-dropdown.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery.ba-hashchange.min.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery.mobile.custom.min.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/gallery.js"></script>
+<style><!--
+div.floatimageleft, div.floatimageright {
+    border: 1px solid black;
+    padding: 2px;
+    margin: 1em;
+}
+div.floatimageleft { clear: left; float: left; }
+div.floatimageright { clear: right; float: right; }
+div.floatimageleft img, div.floatimageright img { border: 0px; }
+
+div.floatimageleft img.zoom, div.floatimageright img.zoom {
+    padding: 4px; 
+}
+--></style>
+<style><!--
+div.albumouter {
+    margin-right: 1ex; 
+    margin-top: 1ex;
+    vertical-align: baseline;
+    display: -moz-inline-box;
+    display: inline-block;
+    text-decoration: none !important; 
+}
+
+.album { display: block; clear: both; }
+
+.album a:link, .album a:hover, .album a:visited
+    { text-decoration: none; }
+.album a:hover { color: red; }
+
+.albumimage {
+    display: block;
+    padding-left: 2px; padding-right: 2px;
+    padding-top: 3px; padding-bottom: 3px;
+    background: #ececec;
+}
+
+.albumimage img.zoom {
+    margin-left: 0px; margin-right: 0px;
+    padding-top: 4px; padding-right: 4px; }
+.albumimage img { border: 0px; 
+    display: block; margin-left: auto; margin-right:auto
+}
+--></style>
+
+<meta name="description" content="I won a copy of the book Hacker's Delight from John Regehr for my entry in his nibble sort contest earlier this year.  In that thread I had heard about the CBMC Bounded Model Checking software, a…">
+</head>
+<body>
+
+
+I won a copy of the book <a href="http://hackersdelight.org/">Hacker's
+Delight</a> from <a href="http://blog.regehr.org/">John Regehr</a> for my entry in
+his <a href="http://blog.regehr.org/archives/1213">nibble sort contest</a>
+earlier this year.
+
+<p>In that thread I had heard about the <a href="http://www.cprover.org/cbmc/">CBMC Bounded Model Checking software</a>, and it gave me the idea to combine
+the two: a project to take implementations of the algorithms from Hacker's
+Delight and prove the algorithms' properties with CBMC.
+
+<p>I have a modest start on github, which I am calling &quot;Proven Delights&quot;:
+<a href="http://jepler.github.io/ProvenDelights/">HTML</a>, <a href="http://jepler.github.io/ProvenDelights/proofs.pdf">PDF</a>, <a href="https://github.com/jepler/ProvenDelights">Source</a>.  I hope others will
+find the concept interesting and submit github pull requests with new
+proofs.
+
+<p>Working more with CBMC has given me a sense of why mathematicians are not
+fully embracing computer proofs in their work.  A traditional proof, like
+you may have first made in high school geometry, serves two purposes: first,
+it shows that the desired conclusion is true in a given axiomatic system;
+but second, a traditional proof can be read by a fellow mathematician and lend
+her some abstract understanding of <strong>why</strong> the conclusion
+is true.
+
+<p>It is from that abstract understanding that she may think of some new theorem
+to prove.  But with a so-called &quot;proof&quot; from software like CBMC, you only learn
+that the computer says the assertions in the model are not violated; there
+is no step by step proof process that a human can learn from.  So when I have
+finished writing a model that I think captures the claims about the expression
+<tt >(x &amp; (x-1))</tt>, and CBMC says &quot;VERIFICATION SUCCESSFUL&quot;, I still don't understand
+why the expression actually &quot;turns off the rightmost one-bit&quot;.
+
+<p>Still, CBMC is pretty neat.  One of the proofs I wrote most recently, for
+sec-ded error codes, proves in a few seconds what takes overnight with a
+program to exhaustively check somewhere in excess of 2^41 distinct cases.
+Not a bad speed-up!
+<br><br><font size=-2>Entry first conceived on 5 August 2015, 13:13 UTC, last modified on 29 February 2016, 22:04 UTC</font>
+</body>
+</html>
