@@ -3,5 +3,10 @@ title: Jeff Epler
 markdown: kramdown
 theme: jekyll-theme-leap-day
 description: Freelance Software Development
+plugins:
+    - jekyll-redirect-from
+whitelist:
+    - jekyll-redirect-from
 github:
     is_project_page: False
+exclude: ['_scripts', 'Gemfile', 'Gemfile.lock', 'README.md']
