@@ -1,0 +1,264 @@
+---
+layout: default
+title: keyestudio gps shield as frequency counter
+redirect_from: 
+ - /01532398717
+---
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>keyestudio gps shield as frequency counter</title>
+<link rel="stylesheet" href="https://media.unpythonic.net/css/bootstrap.min.css">
+<style>
+
+
+#mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #000;
+    opacity: 0.7;
+    display: none;
+}
+
+#loading {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 58px;
+    height: 60px;
+    background-color: black;
+    background-image: url('https://media.unpythonic.net/img/loading.gif');
+    opacity: 0.9;
+    z-index: 20;
+    display: none;
+    border-radius: 4px;
+}
+
+#bigimg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+#maskouter {
+    height: 100%;
+    display: table;
+    margin: 0 auto;
+}
+
+#maskinner {
+    vertical-align: middle;
+    display: table-cell;
+}
+
+#imgleft, #imgright {
+    cursor: pointer;
+    position: fixed;
+    top: 50%;
+    width: 64px;
+    height: 64px;
+    border-radius: 4px;
+    background-color: black;
+    z-index: 22;
+    opacity: 0.7;
+}
+
+#imgleft {
+    left: 0;
+    background-image: url('https://media.unpythonic.net/img/prevbtn.png');
+}
+
+#imgleft.disabled, #imgright.disabled { display: none; } 
+
+#imgright {
+    right: 0;
+    background-image: url('https://media.unpythonic.net/img/nextbtn.png');
+}
+
+#imgdesc {
+    position: fixed;
+    left: 64px;
+    bottom: 0;
+    background-color: #333;
+    width: 100%;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-left: 2em;
+    border: 1px solid #555;
+    border-bottom: 0;
+}
+
+#imgdesc .filename {
+    color: #fff;
+    font-weight: bold;
+}
+
+#imgdesc .description {
+    color: #fff;
+    padding-left: 1em;
+}
+
+#mask { z-index: 10990; }
+#loading { z-index: 10991; }
+#bigimg { z-index: 10992; }
+
+</style>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery-1.6.4.min.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/bootstrap-dropdown.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery.ba-hashchange.min.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery.mobile.custom.min.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/gallery.js"></script>
+<style><!--
+div.floatimageleft, div.floatimageright {
+    border: 1px solid black;
+    padding: 2px;
+    margin: 1em;
+}
+div.floatimageleft { clear: left; float: left; }
+div.floatimageright { clear: right; float: right; }
+div.floatimageleft img, div.floatimageright img { border: 0px; }
+
+div.floatimageleft img.zoom, div.floatimageright img.zoom {
+    padding: 4px; 
+}
+--></style>
+<style><!--
+div.albumouter {
+    margin-right: 1ex; 
+    margin-top: 1ex;
+    vertical-align: baseline;
+    display: -moz-inline-box;
+    display: inline-block;
+    text-decoration: none !important; 
+}
+
+.album { display: block; clear: both; }
+
+.album a:link, .album a:hover, .album a:visited
+    { text-decoration: none; }
+.album a:hover { color: red; }
+
+.albumimage {
+    display: block;
+    padding-left: 2px; padding-right: 2px;
+    padding-top: 3px; padding-bottom: 3px;
+    background: #ececec;
+}
+
+.albumimage img.zoom {
+    margin-left: 0px; margin-right: 0px;
+    padding-top: 4px; padding-right: 4px; }
+.albumimage img { border: 0px; 
+    display: block; margin-left: auto; margin-right:auto
+}
+--></style>
+
+<meta name="description" content="Superficially similar to the elecrow GPS shield at the time of writing it's available from ebay for around $20.   I chose this model because it has a ublox GPS module and a header with signals marke…">
+</head>
+<body>
+
+<div style="float:right;clear:right"><!-- IMG_20180723_211750.jpg--><div class=albumouter style=width:306px id=><div class=albumimage style="width:306px;margin-left:0px;"><a href="https://media.unpythonic.net/emergent-files/01532398717/IMG_20180723_211750-medium.jpg" class="thickbox" rel="album" title="The two GPS receivers on my window sill"><img src="https://media.unpythonic.net/emergent-files/01532398717/IMG_20180723_211750-small.jpg" width=300 height=196></a><div ><div style="float: right" ><a href="https://media.unpythonic.net/emergent-files/01532398717/IMG_20180723_211750-medium.jpg">(M)</a><a href="https://media.unpythonic.net/emergent-files/01532398717/IMG_20180723_211750.jpg">(L)</a></div><a href="https://media.unpythonic.net/emergent-files/01532398717/IMG_20180723_211750.jpg">The two GPS receivers on my window sill</a></div></div></div>
+</div>
+Superficially similar to <a href="https://www.elecrow.com/wiki/images/7/7b/ELEC_GPS_Shield_v1.1.pdf">the elecrow GPS shield</a> at the time of writing it's available from ebay for around $20.
+ 
+<p>I chose this model because it has a ublox GPS module and a header with signals marked &quot;GP&quot; and &quot;EX&quot;.  EX should be external interrupt, and it opens the possibility of a simple GPS-disciplined frequency counter.
+
+<p>It comes with a small antenna, short cable.  One of those godawful laptop style
+connectors, and no provision for directly soldering a better one.  Sigh.
+
+<p>Initially, I connected directly to my PC without a microcontroller involved, by
+jumpering a 5V FTDI dongle to +5V, GND, TX and RX pins.  In this condition, it
+gets a fix after a few minutes on a windowsill with a decent view of the sky
+
+<p>NMEA identification says:
+<pre>
+$GPTXT,01,01,02,u-blox ag - www.u-blox.com*50
+$GPTXT,01,01,02,HW  UBX-G60xx  00040007 FF7FFFFFp*53
+$GPTXT,01,01,02,ROM CORE 7.03 (45969) Mar 17 2011 16:18:34*59
+$GPTXT,01,01,02,ANTSUPERV=AC SD PDoS SR*20
+$GPTXT,01,01,02,ANTSTATUS=DONTKNOW*33
+</pre>
+and it works with u-center so it might even be a genuine ublox module or at
+least a genuine UBX-G60xx chip (but who can say for sure).
+
+<p>Next, I soldered pins to the GP/EX header JP5 and seated it on an
+Arduino form-factor Metro M4 with CircuitPython.
+
+<p>After a bit of hacking, the M4 puts the GPS in frequency counter mode, and I've
+also connected my <a href="https://www.zachtek.com/product-page/gps-referenced-rf-generator-1mhz-out">ublox-based RF generator</a> to the GPS shield to the EX input.  (Note that the RF
+generator's signal is referenced to 3.0V and has a nominal 50 ohm impedance;
+the GPS shield lacks level conversion for the EX pin, so connecting 5V could
+cause damage)
+
+<p>Placing the GPS in counter mode means sending a CFG-MSG packet to turn on TIM-TM2 reports.  Both of these messages are in UBX binary format.
+
+<p>The main hitch I discovered is that in the ublox TIM-TM2 message, the number of
+counts is modulo 2^16 and the message is delivered once a second, so only
+frequencies of up to 65535Hz can be counted directly.
+
+<p>However, when you're willing to allow the assumption that the original clock is
+close to a specific value, the lost high bits of the count can be restored with
+some arithmetic.  As you know the delta time accurately, you know how many
+counts are expected within that delta time.  You simply choose 
+<em>k</em> such that <em>k*65536+lo_counts</em> is closest to the
+expected counts over the given timespan.
+
+<p>The program in its current form compares the most recently received TIM-TM2
+packet to the first received one, so you have to drive the module with a fixed
+frequency from powerup (or, rather, from when the python code starts running).
+
+<p>After a few minutes of accumulated data, the input frequency remains highly
+consistent with being 10MHz (or that they both have the same systematic error
+due to both being based on ublox GPS modules and receiving the same GPS
+signal):
+<pre>
+Frequency estimate =   9999999.999537499
+15999996466 counts in 1599.999646674s
+estimated error [start,end]=62,66ns
+  9999999.998737499 ..  10000000.000337500
+</pre>
+
+<p>While it seems initially that you could go to infinite gate time, in practice I
+don't think that's possible while considering only the first and last packets.
+That's because the error between the nominal and actual frequency will
+accumulate and eventually exceed 2^15 counts.  When this happens, the code to
+restore the count high bits will restore it to a value closer than the true
+value.  However, by doing the high bit restoration based on the two most recent
+TIM-TM2 packets, even this restriction should be lifted.  
+
+<p>(For a nominal 10MHz clock with a 1ppm systematic error, aka 10Hz, this would
+become a problem at around 3276s if I understand properly)
+
+<p>In order to ensure accuracy, my code works with nanoseconds and nanoHz as
+Python longs, so floating point precision (and specifically micropython floats
+which are just 32-bit values!) does not affect the accuracy of the arithmetic.
+
+<p>My code is too un-polished to be published at this time, and due to the
+necessity of hard-coding the nominal frequency I don't plan to publish it at
+this time and may not develop it any further.
+
+<p>Minor update: After running overnight, the two GPSes agree to within a very tight margin (on the order of 1e-11 or a microsecond per day):
+<pre>
+Frequency estimate =  10000000.000036165
+334569999530 counts in 33456.999952879s
+estimated error [start,end]=62,62ns
+  9999999.999999103 ..  10000000.000073228
+</pre>
+However, some estimates are seen which exclude 10MHz exactly:
+<pre>
+Frequency estimate =  10000000.000039292
+335940000414 counts in 33594.000041268s
+estimated error [start,end]=62,62ns
+ 10000000.000002381 ..  10000000.000076204
+</pre>
+In infinite accumulation mode there doesn't seem to be any point to
+letting the program run for longer than a day or so, as you have to run 10x
+as long to get an additional digit of error to disappear.
+<br><br><font size=-2>Entry first conceived on 24 July 2018, 2:18 UTC, last modified on 6 July 2019, 21:49 UTC</font>
+</body>
+</html><!--Imported with do-aether-page on Sat Jul  6 17:23:22 CDT 2019-->
