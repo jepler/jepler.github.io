@@ -1,0 +1,231 @@
+---
+layout: default
+title: 'LinuxCNC on BeagleBone Black, Raspberry Pi, Odroid U3, Odroid XU4'
+redirect_from: 
+ - /01474128483
+---
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>LinuxCNC on BeagleBone Black, Raspberry Pi, Odroid U3, Odroid XU4</title>
+<link rel="stylesheet" href="https://media.unpythonic.net/css/bootstrap.min.css">
+<style>
+
+
+#mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #000;
+    opacity: 0.7;
+    display: none;
+}
+
+#loading {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 58px;
+    height: 60px;
+    background-color: black;
+    background-image: url('https://media.unpythonic.net/img/loading.gif');
+    opacity: 0.9;
+    z-index: 20;
+    display: none;
+    border-radius: 4px;
+}
+
+#bigimg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+#maskouter {
+    height: 100%;
+    display: table;
+    margin: 0 auto;
+}
+
+#maskinner {
+    vertical-align: middle;
+    display: table-cell;
+}
+
+#imgleft, #imgright {
+    cursor: pointer;
+    position: fixed;
+    top: 50%;
+    width: 64px;
+    height: 64px;
+    border-radius: 4px;
+    background-color: black;
+    z-index: 22;
+    opacity: 0.7;
+}
+
+#imgleft {
+    left: 0;
+    background-image: url('https://media.unpythonic.net/img/prevbtn.png');
+}
+
+#imgleft.disabled, #imgright.disabled { display: none; } 
+
+#imgright {
+    right: 0;
+    background-image: url('https://media.unpythonic.net/img/nextbtn.png');
+}
+
+#imgdesc {
+    position: fixed;
+    left: 64px;
+    bottom: 0;
+    background-color: #333;
+    width: 100%;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-left: 2em;
+    border: 1px solid #555;
+    border-bottom: 0;
+}
+
+#imgdesc .filename {
+    color: #fff;
+    font-weight: bold;
+}
+
+#imgdesc .description {
+    color: #fff;
+    padding-left: 1em;
+}
+
+#mask { z-index: 10990; }
+#loading { z-index: 10991; }
+#bigimg { z-index: 10992; }
+
+</style>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery-1.6.4.min.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/bootstrap-dropdown.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery.ba-hashchange.min.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/jquery.mobile.custom.min.js"></script>
+<script type="text/javascript" src="https://media.unpythonic.net/js/gallery.js"></script>
+<style><!--
+div.floatimageleft, div.floatimageright {
+    border: 1px solid black;
+    padding: 2px;
+    margin: 1em;
+}
+div.floatimageleft { clear: left; float: left; }
+div.floatimageright { clear: right; float: right; }
+div.floatimageleft img, div.floatimageright img { border: 0px; }
+
+div.floatimageleft img.zoom, div.floatimageright img.zoom {
+    padding: 4px; 
+}
+--></style>
+<style><!--
+div.albumouter {
+    margin-right: 1ex; 
+    margin-top: 1ex;
+    vertical-align: baseline;
+    display: -moz-inline-box;
+    display: inline-block;
+    text-decoration: none !important; 
+}
+
+.album { display: block; clear: both; }
+
+.album a:link, .album a:hover, .album a:visited
+    { text-decoration: none; }
+.album a:hover { color: red; }
+
+.albumimage {
+    display: block;
+    padding-left: 2px; padding-right: 2px;
+    padding-top: 3px; padding-bottom: 3px;
+    background: #ececec;
+}
+
+.albumimage img.zoom {
+    margin-left: 0px; margin-right: 0px;
+    padding-top: 4px; padding-right: 4px; }
+.albumimage img { border: 0px; 
+    display: block; margin-left: auto; margin-right:auto
+}
+--></style>
+
+<!-- no summary found -->
+</head>
+<body>
+For several years, LinuxCNC has compiled and passed its testsuite on
+common ARM hardware.
+
+<p>That leaves several missing parts for a good LinuxCNC experience actually running hardware:
+<ul>
+<li>UIs that perform well
+<li>Hardware drivers
+<li>Dependable realtime kernels
+<li>Prefabricated OS images
+<li>Volunteers to maintain these ports
+</ul>
+
+<p>As far as UI performance, Mesa with LLVMPipe has made great strides since the
+first time I tried AXIS on a BeagleBone, and CPU improvements don't hurt
+either; performance on boards from Pi on up is pretty good now.  You can also
+choose a previewless UI like touchy or gscreen.  And, of course, remote NML
+works again in version 2.7, so you can run your UI on a different machine than
+your realtime (though this still has plenty of rough corners / papercuts).
+
+<p>Hardware drivers are beginning to trickle in.  2.7 has hm2_spi, which works
+on any preempt-rt with good /dev/spidev hardware drivers.  Unfortunately,
+out of 3 systems I've tried (U3, XU4, and PI3), none had good spidev hardware
+drivers out of the box.  I have a kernel git with patched U3 and XU4 drivers,
+which give good performance on U3 and low to adequate performance on the XU4.
+Our master branch has a userspace spi driver for PI-family CPUs (hm2_rpspi),
+and a GPIO-only driver for BBB (bb_gpio).  One LinuxCNC developer is working
+on a BBB PRU firmware which provides a hostmot2 register-compatible interface,
+but that's not available yet.  Based on my experience porting MachineKit's
+BBB GPIO driver to LinuxCNC, the difficulty of doing so is low, so if MK
+has a hardware driver you'd like to see in LinuxCNC, it's not the worst place
+you could start with contributing to LinuxCNC.  Please remember to credit
+MachineKit authors by name in your LinuxCNC pull request, and also verify
+license compatibility.
+
+<p>For almost all of these boards, you can find various realtime patch sets,
+github repositories, debian packages, and so on.  In my experience, they don't
+always work, which makes for a frustrating experience.  If you want to use
+LinuxCNC 2.7, you need to find a PREEMPT-RT kernel; for our master branch, you
+can use PREEMPT-RT, Xenomai, or RTAI, depending whether your hardware driver
+needs a syscall interface in realtime (hm2_spi does, for example; hm2_rpspi and
+bb_gpio do not)--if you do, then PREEMPT-RT is your only choice.
+
+<p>The Machinekit fork of LinuxCNC offers pre-built realtime kernels and
+prefabricated OS images, and in my experience it is easy to to start with their
+image, remove machinekit and install LinuxCNC from source.  Unfortunately, I
+was unable to find where they publish their kernel source or the scripts they
+use to generate the kernel packages and images.  This means that the LinuxCNC
+project can't build on their packaging and distro-building work.  I'll update
+this space if any little birds tell me where these resources can be found,
+because it would be a big help for a volunteer who wanted to get these kernel
+packages or OS images distributed from linuxcnc.org with LinuxCNC preinstalled.
+
+<p>That brings me to the last point: linuxcnc.org doesn't compensate anyone for
+their work on LinuxCNC.  Current developers have all their time and motivation
+eaten up by supporting existing platforms, so without new volunteers, we
+simply don't have the time and motivation to make these first-rate, like
+we do for standard x86 systems.  Join us and help make the LinuxCNC you want
+to use.
+
+<p><b>Update, 2017/3</b>: A little bird has told me that the machinekit images use
+<a href="https://github.com/beagleboard/image-builder">these scripts to build
+their OS images</a>, but the kernel source remains elusive.  It looks like
+they come from <a href="http://repos.rcn-ee.com/debian">http://repos.rcn-ee.com/debian</a> but while there
+are debian source packages for e.g., lxqt-sudo there aren't for e.g.,
+linux-image-3.8.13-xenomai-r76.
+<br><br><font size=-2>Entry first conceived on 17 September 2016, 16:08 UTC, last modified on 6 July 2019, 21:49 UTC</font>
+</body>
+</html>
