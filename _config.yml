@@ -9,4 +9,4 @@ whitelist:
     - jekyll-redirect-from
 github:
     is_project_page: False
-exclude: ['_scripts', 'Gemfile', 'Gemfile.lock', 'README.md']
+exclude: ['_scripts', 'Gemfile', 'Gemfile.lock', 'README.md', 'vendor']
