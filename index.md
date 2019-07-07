@@ -2,6 +2,9 @@
 layout: default
 title: Jeff Epler, Freelance Software Developer
 ---
+
+<div style="width: 50%; float: right; padding: 1ex"><img style="max-width: 100%" src="{{ '/assets/images/jeff.jpg' | relative_url }}"></div>
+
 About Jeff
 ==========
 
