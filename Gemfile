@@ -4,3 +4,4 @@ gem "jekyll"
 gem "jekyll-redirect-from"
 gem "github-pages", group: :jekyll_plugins
 gem "jekyll-theme-leap-day"
+gem "link-checker"
